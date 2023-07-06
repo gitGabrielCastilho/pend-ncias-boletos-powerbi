@@ -5,6 +5,7 @@ import fdb
 dst_path = r'MTK:C:/Microsys/MsysIndustrial/Dados/MSYSDADOS.FDB'
 excel_path = r'C:/Users/Gabriel/Desktop/boleto-gerar-cr.xlsx'
 excel_path1 = r'C:/Users/Gabriel/Desktop/boleto-emitir.xlsx'
+excel_path2 = r'C:/Users/Gabriel/Desktop/pix-emitir.xlsx'
 a = dateutil.utils.today()
 
 TABLE_NAME = 'RECEBER_TITULOS'
@@ -38,6 +39,9 @@ table_rows3 = cur.fetchall()
 df = pd.DataFrame(table_rows)
 ####################################
 dfx = pd.DataFrame(table_rows1)
+df_pix = dfx
+df_pix = df_pix[df_pix[4] == 'D']
+df_pix = df_pix[df_pix[3] == 'AA']
 dfx = dfx[dfx[4] == 'B']
 dfx = dfx[dfx[3] == 'AA']
 dfy = pd.DataFrame(table_rows2)
@@ -51,8 +55,13 @@ n = pd.merge(dfx,dfz, how='inner', on=0)
 n = n.drop(columns=[0,2,3,4])
 n = n.rename(columns={'1_x':'PEDIDO',5:'VALOR', '1_y':'NOME'})
 ####################################
+o = pd.merge(df_pix,dfz, how='inner', on=0)
+o = o.drop(columns=[0,2,3,4])
+o = o.rename(columns={'1_x':'PEDIDO',5:'VALOR', '1_y':'NOME'})
+####################################
 m.to_excel(excel_path1, index=False)
 n.to_excel(excel_path, index=False)
+o.to_excel(excel_path2, index=False)
 
 
 
